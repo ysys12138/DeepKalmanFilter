@@ -1,0 +1,1 @@
+loss:tensor(0.1593, grad_fn=<MeanBackward0>)
