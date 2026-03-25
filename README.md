@@ -1,20 +1,57 @@
-     Predict.py
-Filtering the input signal in real time. Model: TCN pt10.04
-If the sample frequency is 500Hz, it's fine to set parameters delay=20000, refresh=0.2
+# Real-Time Signal Prediction System
 
-    Input:
-    argv1(filename): name of the row data file, should be csv, this file should change over time.(e.g. test0105)
-    argv2(delay): Warmup time before started, e.g. 20000 refers to 40 seconds, which means you need to wait 40
-    seconds before started, This is just a single wait at the beginning. Subsequent outputs are in real time and will
-    only be delayed by much less than 0.1s.(20000 is the best choice)
-    argv3(refresh): Refresh every how many seconds, e.g. 0.5 This determines the true latency you can feel,
-    can theoretically be set to 0.
-    argv4(offset): key parameter, bias due to differences in environment and sensors.
-    This parameter should result in a static measurement of approximately -0.302V at an applied force of 0
+## Requirements
+- Python 3.9
+- Install dependencies: `pip install -r requirements.txt`
 
-    Output:
-    An output csv file contains the result after signal processing. This file can keep changing over time.
+## Predict.py (TCN Model)
+Model: TCN pt10.04
 
-Predict-KF.py
-Filtering the input signal in real time. Model: DLKF pt0.795
-If the sample frequency is 500Hz, it's fine to set parameters delay=550, refresh=0.2
+For 500Hz sampling frequency, recommended parameters: delay=20000, refresh=0.2
+
+**Usage:**
+```bash
+python Predict.py <filename> <delay> <refresh> <offset>
+```
+
+**Arguments:**
+| Argument | Description |
+|----------|-------------|
+| filename | Input CSV file path (file should update continuously) |
+| delay | Warmup time in samples. 20000 = 40 seconds at 500Hz. Single wait at startup only |
+| refresh | Output refresh interval in seconds. Can be set to 0 for minimal latency |
+| offset | Calibration offset. Should give ~-0.302V at zero force |
+
+**Output:** CSV file with processed signals, updated in real-time
+
+**Example:**
+```bash
+python Predict.py test0105.csv 20000 0.2 -0.302
+```
+
+---
+
+## Predict-KF.py (DLKF Model)
+Model: DLKF pt0.795
+
+For 500Hz sampling frequency, recommended parameters: delay=550, refresh=0.2
+
+**Usage:**
+```bash
+python Predict-KF.py <filename> <delay> <refresh> <offset>
+```
+
+**Arguments:**
+| Argument | Description |
+|----------|-------------|
+| filename | Input CSV file path (file should update continuously) |
+| delay | Warmup time in samples. 550 = ~1.1 seconds at 500Hz |
+| refresh | Output refresh interval in seconds |
+| offset | Calibration offset for environment and sensor variations |
+
+**Output:** CSV file with processed signals, updated in real-time
+
+**Example:**
+```bash
+python Predict-KF.py test0105.csv 550 0.2 -0.302
+```
