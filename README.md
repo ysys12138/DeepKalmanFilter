@@ -1,3 +1,5 @@
+Presentation: [Presentation.pdf](./Presentation(final).pdf)
+Thesis:[Thesis.pdf](./Master_Thesis-final.pdf)
 # Real-Time Signal Prediction System
 
 ## Requirements
